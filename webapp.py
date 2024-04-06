@@ -15,6 +15,8 @@ def gfg():
   def get_links_from_drive(url):
     req = requests.get(url)
     soup = bs4(req.content, features="html.parser")
+    if "Sign-in" in soup.find("title").text:
+      raise Exception("Provide public link")
     script = [x for x in soup.find_all("script") if "https:\\/\\/drive.google.com\\/file\\/d\\/" in str(x)][0]
     links = [x.split("/")[5].strip("\\") for x in str(script).split(",") if "view" in x]
     titles = [x.text for x in soup.find_all('div', class_="tyTrke")]
@@ -39,15 +41,17 @@ def gfg():
     outpath.mkdir(parents=True, exist_ok=True)
     return outpath / image
 
-  def clean_output_dir():
-    for file in Path("static").glob("*"):
-      file.unlink()
- 
   if request.method == "POST":
-    url = request.form.get("files") 
-    titles, links = get_links_from_drive(url)
-    qr_links = generate_qr_codes(links)
-    return render_template("links.html", links=zip(titles, qr_links))
+    try:
+      url = request.form.get("files") 
+      titles, links = get_links_from_drive(url)
+      qr_links = generate_qr_codes(links)
+      return render_template("links.html", links=zip(titles, qr_links))
+    except Exception as e:
+      if str(e) == "Provide public link":
+        return render_template("form.html", message=e)
+      else:
+        return render_template("form.html", message="Invalid URL")
   return render_template("form.html")
 
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
