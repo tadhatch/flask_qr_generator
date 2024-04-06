@@ -28,7 +28,6 @@ def gfg():
       filepath = str(get_image_path(filename))
       img.save(filepath)
       qr_links.append(filename)
-      # download_file(filename)
       print('QR code generated!')
     return qr_links
 
@@ -57,7 +56,4 @@ def download(filename):
     return send_from_directory(uploads, filename)
 
 if __name__=='__main__':
-  # https://drive.google.com/drive/folders/1izOR_sbmrINr59FZSks9zNB-PiKq6kr_?usp=drive_link
-  # https://drive.usercontent.google.com/u/0/uc?id=1Q06zKmk164LWnDyNmk2E9SadMzyrMaV5&export=download
-  # https://drive.google.com/file/d/1fIHMIOBtAP3Qe5WuARiZZ4IikeAZnoK4/view
   app.run(debug=True, port=5001)
