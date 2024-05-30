@@ -13,6 +13,7 @@ packaging==24.0
 pypng==0.20220715.0
 qrcode==7.4.2
 requests==2.31.0
+selenium==4.21.0
 soupsieve==2.5
 typing_extensions==4.10.0
 urllib3==2.2.1
